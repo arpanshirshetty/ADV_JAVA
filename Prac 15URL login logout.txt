@@ -1,0 +1,99 @@
+Prac 15:URL login logout
+Open the other IDE WEB DEV Eclipse
+
+1. New Dynamic Project (name the project)
+2. Right click new-->HTML/JSP
+3.For Html with extension .html
+4. For JSP .jsp extension
+5.For Servlet enter only class name and finish
+
+---------------------------------------------------------------------
+1.login.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <h2>Login Page</h2>
+    <form action="LoginServlet" method="post">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>
+--------------------------------------------------------------------------
+2.Srvlet(#LoginServlet)
+
+import java.io.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Validate username and password (for simplicity, hardcoded values are used)
+        if (username.equals("a") & password.equals("123")) {
+            // Set session attribute to mark user as logged in
+            HttpSession session = request.getSession();
+            session.setAttribute("username", username);
+            response.sendRedirect("welcome.jsp"); // Redirect to welcome page after successful login
+        } else {
+            // Display error message if login fails
+            request.setAttribute("error", "Invalid username or password");
+            RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
+            rd.forward(request, response);
+        }
+    }
+}
+--------------------------------------------------------------------------
+3.Srvlet(#LogoutServlet)
+
+import java.io.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+public class LogoutServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Invalidate session (logout)
+        }
+        response.sendRedirect("login.jsp"); // Redirect to login page after logout
+    }
+}
+----------------------------------------------------------------------
+4.welcome.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome Page</title>
+</head>
+<body>
+    <h2>Welcome Page</h2>
+    <p>Welcome, <%= session.getAttribute("username") %>!</p>
+    <a href="LogoutServlet">Logout</a>
+</body>
+</html>
+-------------------------------------------------------------------
+1.Make sure about server connectivity
+2.If no server go to window--->Show view ---->Server
+3. Download recent server from apache 
+4.run the html file in beginning
+5.Incase error at HttpServelet and Jakarta
+   Rightclick on the project---> properties--->java build path---->libraries---->Class path-->Add libraries
+   ---->ServerRuntime--->Add server and apply to all
+
+
+
+
+

@@ -1,0 +1,120 @@
+Prac 12:Calculator using Servlet
+
+Open the other IDE WEB DEV Eclipse
+
+1. New Dynamic Project (name the project)
+2. Right click new-->HTML/JSP
+3.For Html with extension .html
+4. For JSP .jsp extension
+5.For Servlet enter only class name and finish
+
+------------------------------------------------------------------------------------
+1. Create a Html file
+#index.html
+
+<html><head>
+<title>Calculator App</title></head><body>
+<form action="CalculatorServlet" >
+  Enter First Number <input type="text" name="txtN1">
+<br> Enter Second Number <input type="text" name="txtN2" >
+<br> Select an Operation<input type="radio" name="opr" value="+"> ADDTION  <input type="radio" name="opr" value="-">
+ SUBSTRACTION <input type="radio" name="opr" value="*">
+ MULTIPLY <input type="radio" name="opr" value="/">
+DIVIDE <br><input type="reset">
+<input type="submit" value="Calculate" >
+</form>
+</body>
+</html>
+------------------------------------------------------------------------------
+2.Create a JSP file
+
+#additionalsum.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body bgcolor="cyan">
+<center>
+<h1>Addition Program </h1>
+<form action="Addser" method="post">
+
+<input type="text" name="txtnum1" placeholder="Enter First Number" />
+<br>
+<br>
+<input type="text" name="txtnum2" placeholder="Enter Second Number" />
+<br>
+<br>
+<input type="submit" name="btnsubmit" value="+"  />
+<br>
+<br>
+<input type="submit" name="btnsubmit" value="-"  />
+<br>
+<br>
+<input type="submit" name="btnsubmit" value="*"  />
+<br>
+<br>
+<input type="submit" name="btnsubmit" value="/"  />
+<br>
+</form>
+<%
+
+if(request.getParameter("q")!=null)
+{
+	out.print("result is "+request.getParameter("q"));
+}
+
+
+
+%>
+</center>
+
+</body>
+</html>
+------------------------------------------------------------------------------
+3. Create a servlet file
+#CalculatorServlet
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+ 
+public class CalculatorServlet extends HttpServlet
+{
+public void doGet(HttpServletRequest request, HttpServletResponse response) 
+throws ServletException, IOException { response.setContentType("text/html;charset=UTF-8");
+PrintWriter out = response.getWriter(); out.println("<html><head><title>Servlet CalculatorServlet</title></head><body>");
+double n1 = Double.parseDouble(request.getParameter("txtN1")); 
+double n2 = Double.parseDouble(request.getParameter("txtN2")); 
+double result =0;
+String opr=request.getParameter("opr"); if(opr.equals("+"))
+result=n1+n2; if(opr.equals("*")) result=n1*n2;
+out.println("<h1> Result = "+result); if(opr.equals("-"))
+result=n1-n2;
+ if(opr.equals("/"))
+ result=n1/n2; 
+out.println("</body></html>");
+} 
+
+ }
+-------------------------------------------------------------------------------
+1.Make sure about server connectivity
+2.If no server go to window--->Show view ---->Server
+3. Download recent server from apache 
+4.run the html file in beginning
+5.Incase error at HttpServelet and Jakarta
+   Rightclick on the project---> properties--->java build path---->libraries---->Class path-->Add libraries
+   ---->ServerRuntime--->Add server and apply to all
+--------------------------------------------------------------------------------
+
+

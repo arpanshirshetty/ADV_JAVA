@@ -1,0 +1,172 @@
+Prac 13:Cookie Login Logout
+
+Open the other IDE WEB DEV Eclipse
+
+1. New Dynamic Project (name the project)
+2. Right click new-->HTML/JSP
+3.For Html with extension .html
+4. For JSP .jsp extension
+5.For Servlet enter only class name and finish
+-------------------------------------------------------------------------
+1.Login.html
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="Login" method="post">
+User name : <input type="text" name="uname"><br><br>
+Password : <input type="password" name="pass"><br><br>
+<input type="submit" value="Login">
+</form>
+</body>
+</html>
+--------------------------------------------------------------------
+2.Servlet
+  #Login
+
+ 
+import java.io.IOException;
+import java.io.PrintWriter;
+ 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+ 
+ 
+@WebServlet("/Login")
+public class Login extends HttpServlet {
+  
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  	String un= request.getParameter("uname");
+  	String pw= request.getParameter("pass");
+  	
+      PrintWriter out=response.getWriter();
+  	Cookie ck=new Cookie("auth", un);
+      ck.setMaxAge(600);
+   	if(un.equals("java")&pw.equals("pvg"))
+   	{
+          response.addCookie(ck);
+          response.sendRedirect("home.jsp");
+          return;
+   	}
+   	else
+   	{
+          RequestDispatcher rd = request.getRequestDispatcher("Login.html");
+           out.println("<font color=red>Either user name or password is wrong.</font>");
+           rd.include(request, response);
+   	}
+   }
+ 
+}
+------------------------------------------------------------------------------------------
+3.JSP FILE
+#home.jsp
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+   pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+   <%
+  	Cookie[] cks = request.getCookies();
+  	if (cks != null) {
+     	for (int i = 0; i < cks.length; i++) {
+        	String name = cks[i].getName();
+            String value = cks[i].getValue();
+        	if (name.equals("auth")) {
+               break; // exit the loop and continue the page
+        	}
+        	if (i == (cks.length - 1)) // if all cookie are not valid redirect to error page
+        	{
+               response.sendRedirect("sessionExpired.html");
+               return; // to stop further execution
+        	}
+            i++;
+     	}
+  	} else {
+         response.sendRedirect("sessionExpired.html");
+         return; // to stop further execution
+  	}
+   %>
+   <h3>You had successfully logged in.</h3><br>
+   your session is set to expire in 10min<br>
+   try reloading after 10 min <br>
+   <form action="Logout" method="post">
+      <input type="submit" value="Logout">
+   </form>
+</body>
+</html>
+--------------------------------------------------------------------------------------------
+4.Logout.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ 
+Your had successfully logged out, to login again click here <a href="Login.html"> Login </a>
+</body>
+</html>
+-----------------------------------------------------------------------------------------
+5. Servlet logout
+#Logout
+
+import java.io.IOException;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+ 
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
+   private static final long serialVersionUID = 1L;
+   	
+	
+   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+   	Cookie ck=new Cookie("auth","un"); 
+           ck.setMaxAge(0);
+           response.addCookie(ck);
+          response.sendRedirect("Logout.html");
+   }
+ 
+}
+--------------------------------------------------------------------------------
+6.Session.html
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ 
+Your had successfully logged out, to login again click here <a href="Login.html"> Login </a>
+</body>
+</html>
+-------------------------------------------------------------------------------
+1.Make sure about server connectivity
+2.If no server go to window--->Show view ---->Server
+3. Download recent server from apache 
+4.run the html file in beginning
+5.Incase error at HttpServelet and Jakarta
+   Rightclick on the project---> properties--->java build path---->libraries---->Class path-->Add libraries
+   ---->ServerRuntime--->Add server and apply to all
+
+
+

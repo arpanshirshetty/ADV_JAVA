@@ -1,0 +1,59 @@
+Prac 11: JSP"Happy” Happy Advanced JAVA learning” 
+and user entered name (It may be a simple html page).
+
+Open the other IDE WEB DEV Eclipse
+
+1. New Dynamic Project (name the project)
+2. Right click new-->HTML/JSP
+3.For Html with extension .html
+4. For JSP .jsp extension
+
+-------------------------------------------------------------------------
+
+1. Create an Html File
+
+# index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting Page</title>
+</head>
+<body>
+    <h1>Happy Advanced Java Learning</h1>
+    <p>Please enter your name:</p>
+    <form action="greeting.jsp" method="post">
+        <input type="text" name="userName">
+        <input type="submit" value="Submit">
+    </form>
+    
+    
+</body>
+</html>
+-------------------------------------------------------------------------
+2. Create a Jsp file
+
+#greeting.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Greeting Page</title>
+</head>
+<body>
+    <h1>Happy Advanced Java Learning</h1>
+    <p>Please enter your name:</p>
+    <form action="greeting.jsp" method="post">
+        <input type="text" name="userName">
+        <input type="submit" value="Submit">
+    </form>
+    
+    
+</body>
+</html>
+-----------------------------------------------------------------------
+
+1.Make sure about server connectivity
+2.If no server go to window--->Show view ---->Server
+3. Download recent server from apache 
+4.run the html file
+
