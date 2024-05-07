@@ -1,0 +1,58 @@
+Prac 2 :MOUSE EVENTS
+
+Do in in normal eclipse
+
+CODE:
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+@SuppressWarnings("serial")
+public class Mouse extends JFrame implements MouseListener {
+    JLabel label;
+
+    Mouse() {
+        label = new JLabel();
+        label.setBounds(25, 60, 250, 30);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        add(label);
+
+        setSize(300, 300);
+        setLayout(null);
+        setVisible(true);
+
+        addMouseListener(this);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getContentPane().setBackground(new Color(255, 255, 255));
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new Mouse());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        label.setText("Mouse Clicked");
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        label.setText("Mouse Pressed");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        label.setText("Mouse Released");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        label.setText("Mouse Entered");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        label.setText("Mouse Exited");
+    }
+}

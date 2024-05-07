@@ -1,0 +1,93 @@
+Prac 9:Factorial RMI
+
+// INTERFACE(Save by same name in server with .java extenstin)
+
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface FactorialInterface extends Remote {
+    int calculateFactorial(int n) throws RemoteException;
+}
+----------------------------------------------------------------------------------------------
+//FactorialServer ((Save by same name in server with .java extenstion)
+
+
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+
+public class FactorialServer extends UnicastRemoteObject implements FactorialInterface {
+
+    protected FactorialServer() throws RemoteException {
+        super();
+    }
+
+    @Override
+    public int calculateFactorial(int n) throws RemoteException {
+        if (n == 0 || n == 1) {
+            return 1;
+        } else {
+            return n * calculateFactorial(n - 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            FactorialServer server = new FactorialServer();
+            Naming.rebind("FactorialService", server);
+            System.out.println("Factorial server is running...");
+        } catch (Exception e) {
+            System.err.println("Factorial server exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+}
+-------------------------------------------------------------------------------
+//FactorialClient (Save by same name in client with .java extenstin)
+
+
+import java.rmi.Naming;
+
+public class FactorialClient {
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Usage: java FactorialClient <number>");
+            System.exit(1);
+        }
+
+        int n = Integer.parseInt(args[0]);
+
+        try {
+            FactorialInterface factorialService = (FactorialInterface) Naming.lookup("rmi://localhost/FactorialService");
+            int result = factorialService.calculateFactorial(n);
+            System.out.println("Factorial of " + n + " is: " + result);
+        } catch (Exception e) {
+            System.err.println("Factorial client exception: " + e.toString());
+            e.printStackTrace();
+        }
+    }
+--------------------------------------------------------------------------------
+make sure to copy class file of interface in client side
+
+1.set path= find the path including the bin and then copy the path
+cd/..
+cd (file path of rmi folder)
+D:
+dir
+cd server
+dir
+server>javac *.java
+start rmiregistry (minimise the pop up window)
+
+2. client side
+
+same intial steps
+
+client>java rmiclient
+
+after this make the connection from server side 
+java rmiserver
+
+and then
+java rmiclient
+

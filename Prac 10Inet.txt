@@ -1,0 +1,146 @@
+Prac 10:Inet
+ open in normal eclipse
+Code:
+
+import java.util.Scanner;
+import java.net.InetAddress;
+
+public class Inet {
+
+    public static void main(String[] args) {
+        Scanner obj = new Scanner(System.in);
+        int ch;
+
+        do {
+            System.out.println("Select an option:");
+            System.out.println("1. Get local host information");
+            System.out.println("2. Get information for a specific website");
+            System.out.println("3. Compare two websites");
+            System.out.println("4. Print string representations of websites");
+            System.out.println("5. Check local address");
+            System.out.println("6. Multicast Global Scope");
+            System.out.println("7. Multicast Link Local");
+            System.out.println("8. Multicast Node Local");
+            System.out.println("9. Multicast Organization Local");
+
+            // Input validation
+            while (!obj.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                obj.next(); // Consume the invalid input
+            }
+
+            int n = obj.nextInt();
+            obj.nextLine(); // Consume newline character
+
+            switch (n) {
+                case 1:
+                    try {
+                        InetAddress add = InetAddress.getLocalHost();
+                        System.out.println(add);
+                    } catch (Exception e) {
+                        System.out.println("Error getting local host information: " + e.getMessage());
+                    }
+                    break;
+
+                case 2:
+                    try {
+                        System.out.println("Enter website URL:");
+                        String url = obj.nextLine();
+                        InetAddress ip = InetAddress.getByName(url);
+                        System.out.println("Host Name: " + ip.getHostName());
+                        System.out.println("IP address: " + ip.getHostAddress());
+                    } catch (Exception e) {
+                        System.out.println("Error getting website information: " + e.getMessage());
+                    }
+                    break;
+
+                case 3:
+                    try {
+                        System.out.println("Enter first website URL:");
+                        String url1 = obj.next();
+                        InetAddress ip1 = InetAddress.getByName(url1);
+                        System.out.println("Enter second website URL:");
+                        String url2 = obj.next();
+                        InetAddress ip2 = InetAddress.getByName(url2);
+                        System.out.println("Host Name 1: " + ip1.getHostName());
+                        System.out.println("Host Name 2: " + ip2.getHostName());
+                        if (ip1.equals(ip2)) {
+                            System.out.println("Both websites are equal");
+                        } else {
+                            System.out.println("Both websites are not equal");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Error comparing websites: " + e.getMessage());
+                    }
+                    break;
+
+                case 4:
+                    try {
+                        System.out.println("Enter website URL:");
+                        String url = obj.next();
+                        InetAddress ip = InetAddress.getByName(url);
+                        String s = ip.toString();
+                        System.out.println("String representation: " + s);
+                    } catch (Exception e) {
+                        System.out.println("Error printing string representation: " + e.getMessage());
+                    }
+                    break;
+                case 5:
+                	//Check local address
+                	try {
+	                	InetAddress addF=InetAddress.getByName("www.facebook.com");
+	                	System.out.println("Local address or not: " + addF.isAnyLocalAddress());
+                	} catch (Exception e) {
+                		System.out.println("Error checking local address: " + e.getMessage());
+                	}
+                    break;
+                case 6:
+                	//Multicast Global Scope
+                	try {
+	                	InetAddress addC=InetAddress.getByName("www.ctect.com");
+	                	System.out.println("Multicast address has globe scope: " + addC.isMCGlobal());
+                	} catch (Exception e) {
+                		System.out.println("Error checking multicast global scope: " + e.getMessage());
+                	}
+                	break;
+                case 7:
+                	//Multicast Link Local
+                	try {
+	                	InetAddress addG=InetAddress.getByName("www.google.com");
+	                	System.out.println("Multicast address has link scope: " + addG.isMCLinkLocal());
+                	} catch (Exception e) {
+                		System.out.println("Error checking multicast link local: " + e.getMessage());
+                	}
+                	break;
+                case 8:
+                	//Multicast Node Local
+                	try {
+	                	InetAddress addJ=InetAddress.getByName("www.javatpoint.com");
+	                	System.out.println("Multicast address has node scope: " + addJ.isMCNodeLocal());
+                	} catch (Exception e) {
+                		System.out.println("Error checking multicast node local: " + e.getMessage());
+                	}
+                	break;
+                case 9:
+                	//Multicast Organization Local
+                	try {
+	                	InetAddress addt=InetAddress.getByName("www.pvgcoet.ac.in");
+	                	System.out.println("Multicast address has organization scope: " + addt.isMCOrgLocal());
+                	} catch (Exception e) {
+                		System.out.println("Error checking multicast organization local: " + e.getMessage());
+                	}
+                	break;
+
+                default:
+                    System.out.println("Invalid option");
+            }
+
+            System.out.println("Enter 1 to continue, 0 to exit:");
+            ch = obj.nextInt();
+            obj.nextLine(); // Consume newline character
+
+        } while (ch == 1);
+
+        obj.close();
+    }
+}

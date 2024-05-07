@@ -1,0 +1,57 @@
+Prac1 Key Events on Applet Window
+
+Open in normal Eclipse
+
+Code:
+import java.awt.*;
+import java.awt.event.*;
+
+public class ClassEventDemo extends WindowAdapter implements KeyListener {
+ Label label1,label2;
+TextField field1;
+Frame jf;
+String str;
+ClassEventDemo(){
+	jf=new Frame("Handling KeyEvent");
+	label1 = new Label("Press any key on keyboard", Label.CENTER);
+    label2 = new Label();
+    jf.setLayout(new FlowLayout());
+    field1 = new TextField(15);
+    jf.add(label1);
+    jf.add(label2);
+    jf.add(field1);
+    field1.addKeyListener(this);
+    jf.setSize(400, 200);
+    jf.addWindowListener(this); 
+    jf.setVisible(true);
+}
+@Override
+
+    public void keyReleased(KeyEvent ke) {
+       str+="-Key Released-";
+       label2.setText(str);
+       jf.setVisible(true);
+       str="";
+       }
+
+    public void keyTyped(KeyEvent ke) {
+    	 str+="-Key Typed-";
+         jf.setVisible(true);
+         str="";
+    }
+
+    public void keyPressed(KeyEvent ke) {
+    	 str+="-KeyCode:"+ke.getKeyCode()+",-Key Pressed_";
+         label2.setText(str);
+         jf.setVisible(true);
+         str="";
+    }
+    public void windowClosing(WindowEvent e) {
+        jf.dispose(); // Close the frame
+        System.exit(0); // Exit the application
+    }
+
+    public static void main(String[] args) {
+        new ClassEventDemo();
+    }
+}

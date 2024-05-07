@@ -1,0 +1,153 @@
+Prac 6:JDBC
+Use normal eclipse
+
+#connectivity
+
+package AJPExperiments;
+import java.sql.*;
+public class connectivityCheck {
+public static void main(String args[]) {
+try {
+Class.forName("com.mysql.cj.jdbc.Driver");
+System.out.println("JDBC driver has been successfully loaded.\n");
+Connection con = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/?user=root&password=root");
+System.out.println("Connection to the MySQL database has been 
+successfully established");
+con.close();
+}
+catch(Exception ex) {
+ex.printStackTrace();
+}
+}
+}
+
+#RETRIEVING AND DISPLAYING DATA
+
+package AJPExperiments;
+import java.sql.*;
+public class retrieveData {
+ public static void main(String args[]) throws SQLException {
+ 
+ System.out.println("Step 1: ");
+ try {
+ Class.forName("com.mysql.cj.jdbc.Driver");
+ } catch (ClassNotFoundException e) {
+ e.printStackTrace();
+ }
+ System.out.println("JDBC driver has been successfully loaded.\n");
+ 
+ System.out.println("Step 2: ");
+ String url = "jdbc:mysql://localhost:3306/?user", uname = "root", password = 
+"root";
+ Connection connection = DriverManager.getConnection(url, uname, password);
+ if (connection != null)
+ System.out.println("Connection Established Successfully.\n");
+ else
+ System.out.println("Connection Not Established Successfully.\n");
+ System.out.println("Step 3: ");
+ Statement st = connection.createStatement();
+ System.out.println("Statement Referenced.\n");
+ System.out.println("Step 4: ");
+ String qry = "select * from student.studentData";
+ ResultSet rs = st.executeQuery(qry);
+ System.out.println("rs : " + rs + "\n");
+ 
+ System.out.println("Step 5: \n");
+ System.out.printf("Roll no", "Name", "Branch", "Year");
+ while (rs.next()) {
+ int a = rs.getInt("rollNo");
+ String b = rs.getString("Name");
+ String c = rs.getString("Branch");
+ String d = rs.getString("Year");
+ System.out.printf("\t"+a+"\t"+b+"\t"+c+"\t"+d);
+ }
+ 
+ rs.close();
+ System.out.println("\nStep 6: Database Closed.");
+ 
+ st.close();
+ connection.close();
+ }
+}
+
+#INSERTION OF DATA
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+public class insertData {
+ private static final String JDBC_URL = 
+"jdbc:mysql://localhost:3306/studentData?user=root&password=root";      #DONT FORGET TO CHANGE DATABASE NAME
+ public static void main(String[] args) {
+ try {
+ Connection connection = DriverManager.getConnection(JDBC_URL);
+ createTable(connection);
+ clearTable(connection);
+ System.out.println("Inserted data is : \n");
+ insertData(connection, 1, "Neha", "Electronics", "TE");
+ insertData(connection, 2, "Swara", "Computer", "FE");
+ insertData(connection, 3, "Amey", "IT", "TE");
+ insertData(connection, 4, "Sangeeta", "Electrical", "BE");
+ insertData(connection, 5, "Devendra", "Mechanical", "BE");
+ displayData(connection);
+ connection.close();
+ } catch (SQLException e) {
+ e.printStackTrace();
+ }
+ }
+ private static void createTable(Connection connection) throws SQLException {
+ String sql = "CREATE TABLE IF NOT EXISTS student_table (" +
+ "Roll_no INT PRIMARY KEY, " +
+ "Name VARCHAR(25), " +
+ "Branch VARCHAR(25), " +
+ "Year VARCHAR(2))";
+ try (PreparedStatement statement = connection.prepareStatement(sql)) {
+ statement.executeUpdate();
+ }
+ }
+ private static void clearTable(Connection connection) throws SQLException {
+ String sql = "TRUNCATE TABLE student_table";
+ try (PreparedStatement statement = connection.prepareStatement(sql)) {
+ statement.executeUpdate();
+ System.out.println("Table cleared successfully.\n");
+ }
+ }
+ private static void insertData(Connection connection, int rollNo, String name, String 
+branch, String year)
+ throws SQLException {
+ String sql = "INSERT INTO student_table (Roll_no, Name, Branch, Year) VALUES (?, 
+?, ?, ?)";
+ try (PreparedStatement statement = connection.prepareStatement(sql)) {
+ statement.setInt(1, rollNo);
+ statement.setString(2, name);
+ statement.setString(3, branch);
+ statement.setString(4, year);
+ int rowsInserted = statement.executeUpdate();
+ }
+ }
+ private static void displayData(Connection connection) throws SQLException {
+ String sql = "SELECT * FROM student_table";                                     #CHANGE TABLE NAME
+ try (PreparedStatement statement = connection.prepareStatement(sql);
+ ResultSet resultSet = statement.executeQuery()) {
+ System.out.println( "Roll no", "Name", "Branch", 
+"Year");
+ while (resultSet.next()) {
+ int rollNo = resultSet.getInt("Roll_no");
+ String name = resultSet.getString("Name");
+ String branch = resultSet.getString("Branch");
+ String year = resultSet.getString("Year");
+ System.out.println( rollNo+"\t"+name+"\t"branch+"\t"year);
+ }
+ }
+ }
+}
+------------------------------------------------------------------------------------------------------
+SQL
+create database set ;
+use set;
+create table students (numer int,name varchar(20),subject varchar(20));
+insert into students values(...........)
+select *from students

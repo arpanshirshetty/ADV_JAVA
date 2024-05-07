@@ -1,0 +1,129 @@
+Prac 4:Railway ticket GUI
+
+Normal Eclipse
+
+CODE:
+
+import java.awt.*;
+import java.awt.event.*;
+
+class TicketBookingGUI extends Frame implements ActionListener {
+    Label nameLabel, ageLabel, genderLabel;
+    TextField nameText, ageText;
+    Checkbox maleCheckbox, femaleCheckbox, otherCheckbox;
+    Button submitButton;
+    
+    TicketBookingGUI() {
+        nameLabel = new Label("Name:");
+        nameLabel.setBounds(50, 50, 100, 30);
+        ageLabel = new Label("Age:");
+        ageLabel.setBounds(50, 100, 100, 30);
+        genderLabel = new Label("Gender:");
+        genderLabel.setBounds(50, 150, 100, 30);
+        
+        nameText = new TextField();
+        nameText.setBounds(150, 50, 150, 30);
+        ageText = new TextField();
+        ageText.setBounds(150, 100, 150, 30);
+        
+        maleCheckbox = new Checkbox("Male");
+        maleCheckbox.setBounds(150, 150, 50, 30);
+        femaleCheckbox = new Checkbox("Female");
+        femaleCheckbox.setBounds(210, 150, 70, 30);
+        otherCheckbox = new Checkbox("Other");
+        otherCheckbox.setBounds(290, 150, 60, 30);
+        
+        submitButton = new Button("Submit");
+        submitButton.setBounds(150, 200, 100, 30);
+        submitButton.addActionListener(this);
+        
+        add(nameLabel);
+        add(ageLabel);
+        add(genderLabel);
+        add(nameText);
+        add(ageText);
+        add(maleCheckbox);
+        add(femaleCheckbox);
+        add(otherCheckbox);
+        add(submitButton);
+        
+        setTitle("Ticket Booking");
+        setSize(400, 300);
+        setLayout(null);
+        setVisible(true);
+        
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
+    }
+    
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == submitButton) {
+            String name = nameText.getText();
+            int age = Integer.parseInt(ageText.getText());
+            String gender = "";
+            if (maleCheckbox.getState()) {
+                gender = "Male";
+            } else if (femaleCheckbox.getState()) {
+                gender = "Female";
+            } else if (otherCheckbox.getState()) {
+                gender = "Other";
+            }
+            
+            // Calculate ticket amount (Assuming a simple calculation)
+            double ticketAmount = calculateTicketAmount(age);
+            
+            // Display ticket amount on separate window
+            new TicketAmountWindow(name, age, gender, ticketAmount);
+        }
+    }
+    
+    // Method to calculate ticket amount (can be more complex in real application)
+    private double calculateTicketAmount(int age) {
+        double baseAmount = 100; // Base ticket amount
+        if (age < 18) {
+            return baseAmount * 0.75; // 25% discount for passengers under 18
+        } else if (age >= 60) {
+            return baseAmount * 0.5; // 50% discount for passengers over 60
+        } else {
+            return baseAmount; // No discount for other passengers
+        }
+    }
+}
+
+class TicketAmountWindow extends Frame {
+    TicketAmountWindow(String name, int age, String gender, double ticketAmount) {
+        Label nameLabel = new Label("Passenger Name: " + name);
+        nameLabel.setBounds(50, 50, 200, 30);
+        Label ageLabel = new Label("Age: " + age);
+        ageLabel.setBounds(50, 100, 200, 30);
+        Label genderLabel = new Label("Gender: " + gender);
+        genderLabel.setBounds(50, 150, 200, 30);
+        Label amountLabel = new Label("Ticket Amount:₹" + ticketAmount);
+        amountLabel.setBounds(50, 200, 200, 30);
+        
+        add(nameLabel);
+        add(ageLabel);
+        add(genderLabel);
+        add(amountLabel);
+        
+        setTitle("Ticket Amount");
+        setSize(300, 250);
+        setLayout(null);
+        setVisible(true);
+        
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                dispose();
+            }
+        });
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        new TicketBookingGUI();
+    }
+}
